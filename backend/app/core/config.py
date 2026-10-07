@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -48,3 +49,12 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+if settings.APP_ENV == "production":
+    required_environment = ("DATABASE_URL", "SECRET_KEY", "FRONTEND_URL")
+    missing_environment = [name for name in required_environment if not os.getenv(name)]
+    if missing_environment:
+        raise RuntimeError(
+            "Production configuration requires environment variables: "
+            + ", ".join(missing_environment)
+        )
