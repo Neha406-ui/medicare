@@ -1,8 +1,9 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from pathlib import Path
+
 from alembic import command
 from alembic.config import Config
-from pathlib import Path
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app.core.config import settings
 
@@ -16,7 +17,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def init_db() -> None:
-    Base.metadata.create_all(bind=engine)
     backend_dir = Path(__file__).resolve().parents[2]
     alembic_config = Config(str(backend_dir / "alembic.ini"))
     alembic_config.set_main_option("script_location", str(backend_dir / "alembic"))
